@@ -17,7 +17,7 @@ public class MatchGUI {
 
 	public MatchGUI() {
 		/* initializes the frame object and the two panel objects */
-		JFrame boardFrame = new JFrame("Connect Four - Player " + currentPlayer + "'s Turn");
+		final JFrame boardFrame = new JFrame("Connect Four - Player " + currentPlayer + "'s Turn");
 		JPanel boardPanel = (JPanel) boardFrame.getContentPane();
 		
 		/* initializes the buttons that the users click on to drop a chip into the board */
@@ -41,13 +41,6 @@ public class MatchGUI {
 								"Player " + currentPlayer + " Wins!", JOptionPane.YES_NO_OPTION);
 						if (n == 0) {
 							new MatchGUI();
-						} else {
-							try {
-								new MainMenuGUI();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
 						}
 						boardFrame.dispose();
 					} else if (Controller.isDraw(gameBoard)) {
@@ -57,13 +50,6 @@ public class MatchGUI {
 								JOptionPane.YES_NO_OPTION);
 						if (n == 0) {
 							new MatchGUI();
-						} else {
-							try {
-								new MainMenuGUI();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
 						}
 						boardFrame.dispose();
 					} else {

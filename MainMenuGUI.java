@@ -24,7 +24,7 @@ import javax.swing.border.LineBorder;
 public class MainMenuGUI {
 	public MainMenuGUI() throws IOException{
 		/* initializes the frame object and the two panel objects */
-		JFrame mainMenuFrame = new JFrame("Main Menu");
+		final JFrame mainMenuFrame = new JFrame("Main Menu");
 		JPanel titlePanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 		
@@ -35,21 +35,10 @@ public class MainMenuGUI {
 		JButton hostGameButton = new JButton("Host Game");
 		hostGameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new LobbyGUI(1);
+				LobbyGUI lobbyGUI = new LobbyGUI(true, null);
+				Thread t = new Thread(lobbyGUI);
+				t.start();
 				mainMenuFrame.dispose();
-				// create a server socket which listens for incoming connections
-				System.out.println("Server launching ..");
-				ServerSocket serverSocket;
-				try {
-					serverSocket = new ServerSocket(9090);
-					// need a button to stop creating connection
-					while (true) {
-						System.out.println("accepting connection ..");
-						Socket s = serverSocket.accept();
-					}
-				} catch (IOException e1) {
-					System.out.println("server unable to launch");
-				}		
 			}
 		});
 		
@@ -58,15 +47,10 @@ public class MainMenuGUI {
 		joinGameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String IPAddressToConnectTo = JOptionPane.showInputDialog(mainMenuFrame, "Please enter IP address of host");
-				try {
-					// initialize the connection with the server
-					Socket s = new Socket(IPAddressToConnectTo, 9090);
-					System.out.println("Connection established successfully.");
-					new LobbyGUI(0);
-					mainMenuFrame.dispose();
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(mainMenuFrame, "Please Enter a valid IP address");
-				} 
+				LobbyGUI lobbyGUI = new LobbyGUI(false, IPAddressToConnectTo);
+				Thread t = new Thread(lobbyGUI);
+				t.start();
+				mainMenuFrame.dispose();
 			}
 		});
 		
