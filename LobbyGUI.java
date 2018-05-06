@@ -23,8 +23,8 @@ import javax.swing.JScrollPane;
 public class LobbyGUI implements Runnable {
 	boolean isHostOfLobby;
 	String IPAddressToConnectTo;
-	String player1;
-	String player2;
+	String player1 = null;
+	String player2 = null;
 
 	JFrame lobbyFrame;
 	JLabel playerListLabel;
@@ -180,7 +180,7 @@ public class LobbyGUI implements Runnable {
 					// TODO Make it so that when the user leaves the lobby, their name is removed
 					// from the playerList HashMap
 
-					String IPAddressThatJustEntered = "";
+					String IPAddressThatJustEntered = "" + InetAddress.getLocalHost();
 					String playerName = IPAddressThatJustEntered;
 					
 
