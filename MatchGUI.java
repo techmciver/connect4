@@ -3,10 +3,15 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class MatchGUI {
 	/* initializes the current player (which determines the color of the chip dropped) */
-	private int currentPlayer = 1;
+	private String currentPlayer;
+	private String player1;
+	private String player2;
+	private PriorityQueue list;
 
 	/* initializes the board object of this MatchGUI object */
 	private Board gameBoard = new Board();
@@ -15,7 +20,12 @@ public class MatchGUI {
 	/* initializes the spaces labels */
 	private JLabel[][] spaces;
 
-	public MatchGUI() {
+	public MatchGUI(String a, String b, Queue<String> playerList) {
+		list = (PriorityQueue) playerList;
+		player1 = a;
+		player2 = b;
+		currentPlayer = player1;
+		
 		/* initializes the frame object and the two panel objects */
 		final JFrame boardFrame = new JFrame("Connect Four - Player " + currentPlayer + "'s Turn");
 		JPanel boardPanel = (JPanel) boardFrame.getContentPane();
@@ -40,7 +50,30 @@ public class MatchGUI {
 						int n = JOptionPane.showConfirmDialog(boardFrame, "Play again?",
 								"Player " + currentPlayer + " Wins!", JOptionPane.YES_NO_OPTION);
 						if (n == 0) {
-							new MatchGUI();
+							new MatchGUI(player1, player2, list);
+						}
+						
+						if (n == 1){
+							
+							if (currentPlayer == player1){
+								list.add(player2);
+								
+								if(list.peek() != null){
+							    player2 = (String) list.poll();}
+							} 
+						
+							
+							if (currentPlayer == player2){
+								
+								list.add(player1);
+								player1 = player2; 
+								
+								if(list.peek() != null){
+								player2 = (String) list.poll();}
+								}
+							
+							new MatchGUI(player1, player2, list);
+							
 						}
 						boardFrame.dispose();
 					} else if (Controller.isDraw(gameBoard)) {
@@ -49,13 +82,32 @@ public class MatchGUI {
 						int n = JOptionPane.showConfirmDialog(boardFrame, "Play again?", "Draw",
 								JOptionPane.YES_NO_OPTION);
 						if (n == 0) {
-							new MatchGUI();
+							new MatchGUI(player1, player2, list);
+						}
+						
+						if (n == 1){
+							
+							list.add(player1);
+							list.add(player2);
+							player1 = null;
+							player2 = null;
+							while(player1 != null && player2 != null){
+								
+								if (player1 != null && list.peek() != null ){
+									player1 = (String) list.poll();}else{System.out.println("Error; not enough players to start game.");}
+								
+								if (player2 != null && list.peek() != null ){
+									player2 = (String) list.poll();}else{System.out.println("Error; not enough players to start game.");}
+							}
+							
+							new MatchGUI(player1, player2, list);
+							
 						}
 						boardFrame.dispose();
 					} else {
 						/* else continue the game as normal */
 						updateBoard();
-						currentPlayer = Controller.changePlayer(currentPlayer);
+						currentPlayer = Controller.changePlayer(currentPlayer, player1, player2);
 						boardFrame.setTitle("Connect Four - Player " + currentPlayer + "'s Turn");
 					}
 				}
@@ -93,10 +145,10 @@ public class MatchGUI {
 	public void updateBoard() {
 		for (int row = 0; row < boardSize; row++) {
 			for (int column = 0; column < boardSize; column++) {
-				if (gameBoard.getSpaceOwnership(row, column, 1)) {
+				if (gameBoard.getSpaceOwnership(row, column, player1)) {
 					spaces[row][column].setOpaque(true);
 					spaces[row][column].setBackground(Color.red);
-				} else if (gameBoard.getSpaceOwnership(row, column, 2)) {
+				} else if (gameBoard.getSpaceOwnership(row, column, player2)) {
 					spaces[row][column].setOpaque(true);
 					spaces[row][column].setBackground(Color.yellow);
 				}

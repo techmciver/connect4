@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -23,7 +24,6 @@ public class LobbyGUI implements Runnable {
 	String IPAddressToConnectTo;
 	String player1;
 	String player2;
-	String winner;
 
 	JFrame lobbyFrame;
 	JLabel playerListLabel;
@@ -55,44 +55,31 @@ public class LobbyGUI implements Runnable {
 				// Make the "Start Game" button start a match with one of the players in the
 				// lobby; maybe make it so whoever joined the lobby first will be first in line
 				// to play
-				while(playerList.size() < 2){
+
+				if(playerList.size() < 2){
 					System.out.println("Waiting for more players to join the lobby");
 				}
-				if(playerList.size() >= 2){
+				else{
 					
 					// if playerList.peek() == null, ask if current players want to play again because there are no waiting players to play 
-					// if playerList.peek() != null, move winner into player 1 and peek player into player 2/ remove from playerList, move losing player into playerlist queue
 					
-				
-					// ask winner if you they want to play again 
-					if (winner == "player1"){
-						playerList.add(player2);
-					    player2 = playerList.poll();
-					
-					} 
-					else if (winner == "player2"){
-						
-						playerList.add(player1);
-						player1 = player2; 
-						player2 = playerList.poll();
-					}
-					else{
-						//draw case 
-						
 						//new lobby case
 						if(player1 != null && player2 != null){
-						playerList.add(player1);
-						playerList.add(player2);
+							playerList.add(player1);
+							playerList.add(player2);
 						}
 						
-						player1 = playerList.poll();
-						player2 = playerList.poll();
+						if (playerList.peek() != null){
+						player1 = playerList.poll();}else{System.out.println("Error; not enough players to start game.");}
 						
-					}
+						if (playerList.peek() != null){
+						player2 = playerList.poll();}else{System.out.println("Error; not enough players to start game.");}
+						
+				
 					
 					//new MatchGUI should contain players 1 and 2  MatchGUI(Player1, Player2) 
 					// to do so much control a lock system for critical sections 
-					new MatchGUI(player1, player2);
+					new MatchGUI(player1, player2, playerList);
 					
 				}
 
@@ -182,7 +169,7 @@ public class LobbyGUI implements Runnable {
 					// TODO Make it so that when the user leaves the lobby, their name is removed
 					// from the playerList HashMap
 
-					String IPAddressThatJustEntered = "";
+					String IPAddressThatJustEntered = "" + InetAddress.getLocalHost();
 					String playerName = IPAddressThatJustEntered;
 
 					/* adds new player to playerList if they are not yet in the playerList */

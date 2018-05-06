@@ -37,8 +37,17 @@ public class Board {
 	 * @param currentPlayer
 	 *            The current player
 	 */
-	public void setSpaceOwnership(int row, int column, int currentPlayer) {
-		gameBoard[row][column] = currentPlayer;
+	public void setSpaceOwnership(int row, int column, String currentPlayer) {
+		int play = 0;
+		
+		if(currentPlayer == "player1"){
+			play = 1;
+		}
+		
+		if(currentPlayer =="player2"){
+			play = 2;
+		}
+		gameBoard[row][column] = play;
 		remainingSpaces--;
 	}
 
@@ -51,8 +60,19 @@ public class Board {
 	 *            The current player
 	 * @return If current player is owner of the space
 	 */
-	public boolean getSpaceOwnership(int row, int column, int currentPlayer) {
-		return gameBoard[row][column] == currentPlayer;
+	public boolean getSpaceOwnership(int row, int column, String currentPlayer) {
+		int play = 0;
+		
+		if(currentPlayer == "player1"){
+			play = 1;
+		}
+		
+		if(currentPlayer =="player2"){
+			play = 2;
+		}
+		
+		
+		return gameBoard[row][column] == play;
 	}
 
 	/**

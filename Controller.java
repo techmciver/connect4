@@ -7,11 +7,11 @@ public class Controller {
 	 *            The current player
 	 * @return The player who will take their turn next
 	 */
-	public static int changePlayer(int currentPlayer) {
-		if (currentPlayer == 1) {
-			currentPlayer++;
-		} else if (currentPlayer == 2) {
-			currentPlayer--;
+	public static String changePlayer(String currentPlayer,String p1, String p2) {
+		if (currentPlayer == p1) {
+			currentPlayer = p2;
+		} else if (currentPlayer == p2) {
+			currentPlayer = p1;
 		}
 		return currentPlayer;
 	}
@@ -25,7 +25,7 @@ public class Controller {
 	 *            The current player
 	 * @return If either player has satisfied one of the victory conditions
 	 */
-	public static boolean isWon(Board gameBoard, int row, int column, int currentPlayer) {
+	public static boolean isWon(Board gameBoard, int row, int column, String currentPlayer) {
 		gameBoard.setSpaceOwnership(row, column, currentPlayer);
 
 		if (isWon(gameBoard, row, column, 0, 1, currentPlayer) || isWon(gameBoard, row, column, -1, 0, currentPlayer)
@@ -52,7 +52,7 @@ public class Controller {
 	 * @return (Helper method for isGameover)
 	 */
 	private static boolean isWon(Board gameBoard, int row, int column, int rowDirection, int columnDirection,
-			int currentPlayer) {
+			String currentPlayer) {
 		int tempRow = row;
 		int tempColumn = column;
 
