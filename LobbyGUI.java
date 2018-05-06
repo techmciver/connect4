@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -105,6 +106,7 @@ public class LobbyGUI implements Runnable {
 						// Make it so that when the host quits the lobby, the other players receive a
 						// pop-up window which tells them the host has left, which should bring them
 						// back to the main menu
+						
 					}
 				} catch (IOException e1) {
 					System.out.println("Server: Unable to close server socket");
@@ -112,11 +114,20 @@ public class LobbyGUI implements Runnable {
 				}
 
 				try {
+					//pop up window to notify that players in queue that the host quit the lobby
+					JOptionPane.showMessageDialog(lobbyFrame, "Host has ended server", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+					
+					
+					String playerName = "" + InetAddress.getLocalHost();
+					playerList.remove(playerName);
+					
 					new MainMenuGUI();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 				lobbyFrame.dispose();
+				
 			}
 		});
 
@@ -169,8 +180,9 @@ public class LobbyGUI implements Runnable {
 					// TODO Make it so that when the user leaves the lobby, their name is removed
 					// from the playerList HashMap
 
-					String IPAddressThatJustEntered = "" + InetAddress.getLocalHost();
+					String IPAddressThatJustEntered = "";
 					String playerName = IPAddressThatJustEntered;
+					
 
 					/* adds new player to playerList if they are not yet in the playerList */
 					if (!playerList.contains(IPAddressThatJustEntered)) {
@@ -184,7 +196,7 @@ public class LobbyGUI implements Runnable {
 					}
 				}
 			} catch (IOException e1) {
-				System.out.println("Server: Server closed");
+				System.out.println("Server: Server closed.");
 			}
 		}
 		/* if this is a thread of a client */
@@ -210,7 +222,7 @@ public class LobbyGUI implements Runnable {
 				try {
 					if (socket != null) {
 						socket.close();
-						System.out.println("Client: Socket closed");
+						System.out.println("Client: Socket closed..");
 					}
 				} catch (IOException e1) {
 					System.out.println("Client: Unable to close socket");
